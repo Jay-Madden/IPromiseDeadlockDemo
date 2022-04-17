@@ -47,8 +47,15 @@ public static class Program
     
     // This will deadlock, due to the usage of both promises calling .GetResult on the delay and
     // Therefore blocking the thread that could be used as a continuation thread
+    
+    Promise<int>.Resolve(1)
+      .Then(FooAsync)
+      .Then(FooAsync);
+    
+    /* Both of these options will deadlock
     Promise<int>.Resolve(1).Then(FooAsync);
-    Promise<int>.Resolve(1).Then(FooAsync);
+    Promise<int>.Resolve(2).Then(FooAsync);
+    */
     
     await Task.Delay(5000);
     Console.WriteLine("---------------  End IPromise demonstration  ----------------- \n");
